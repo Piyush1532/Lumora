@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { useClerk, useUser, UserButton } from "@clerk/clerk-react";
@@ -23,19 +23,27 @@ const Navbar = () => {
     { name: 'About', path: '/' },
   ];
 
-  const [isScrolled, setIsScrolled] = React.useState(false);
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isScrolled, setIsScrolled] =useState(false);
+  const [isMenuOpen, setIsMenuOpen] =useState(false);
 
   const { openSignIn } = useClerk();
   const { user } = useUser();
 
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
+if (location.pathname!=="/") {
+  setIsScrolled(true)
+  return
+}else{
+  setIsScrolled(false)
+}
+setIsScrolled(prev=>location.pathname!=="/"?true:prev)
+
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [location.pathname]);
 
   return (
     <nav
@@ -48,10 +56,11 @@ const Navbar = () => {
       {/* Logo */}
       <Link to="/">
         <img
-          src={assets.logoTransparent}
-          alt="logo"
-          className={`h-10 ${isScrolled && "invert opacity-80 mix-blend-darken"}`}
-        />
+  src={!isScrolled ? assets.logoTransparent : assets.logoBlack}
+  alt="logo"
+  className="h-10 transition duration-500"
+/>
+
       </Link>
 
       {/* Desktop Nav */}
@@ -111,12 +120,23 @@ const Navbar = () => {
 
       {/* Mobile Menu Button */}
       <div className="flex items-center gap-3 md:hidden">
+      {user ?
+          <UserButton>
+            <UserButton.MenuItems>
+              <UserButton.Action
+                label="My Bookings"
+                labelIcon={<BookIcon />}
+                onClick={() => navigate("/my-bookings")}
+              />
+            </UserButton.MenuItems>
+          </UserButton>:"" }
         <img
           src={assets.menuIcon}
           alt="menu"
           className={`${isScrolled && "invert"} h-4 cursor-pointer`}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         />
+  
       </div>
 
       {/* Mobile Menu */}
