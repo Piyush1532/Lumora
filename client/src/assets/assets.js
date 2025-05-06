@@ -1,5 +1,6 @@
 import logoTransparent from "./lumora-logo-transparent.png"
 import logoGreyScale from "./lumora-grayscale-transparent.png"
+import logoBlack from "./lumora-black-logo.png"
 import heroImage from "./heroImage.avif"
 import searchIcon from './searchIcon.svg'
 import userIcon from './userIcon.svg'
@@ -44,6 +45,7 @@ import totalRevenueIcon from "./totalRevenueIcon.svg";
 export const assets = {
     logoGreyScale,
     logoTransparent,
+    logoBlack,
     searchIcon,
     heroImage,
     userIcon,
